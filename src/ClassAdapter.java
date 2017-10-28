@@ -11,8 +11,9 @@ class ClassAdapter extends ClassVisitor implements Opcodes {
     @Override
     public MethodVisitor visitMethod(final int access, final String name,
             final String desc, final String signature, final String[] exceptions) {
+		
 		System.out.printf("Access:\t\t%d\nName:\t\t%s\nDesc:\t\t%s\nSignature:\t%s\n\n", access, name, desc, signature);
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-        return mv;
+        return mv == null ? null : new MethodAdapter(mv);
     }
 }
