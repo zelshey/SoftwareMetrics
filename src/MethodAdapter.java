@@ -7,8 +7,8 @@ import org.objectweb.asm.AnnotationVisitor;
 class MethodAdapter extends MethodVisitor implements Opcodes {
 	int numLines;
 
-    public MethodAdapter(final MethodVisitor mv) {
-        super(ASM5, mv);
+    public MethodAdapter() {
+        super(ASM5);
     }
 
     @Override
@@ -28,4 +28,5 @@ class MethodAdapter extends MethodVisitor implements Opcodes {
 		numLines++;
 		super.visitLineNumber(line, start);
 	}	
+	
 }
