@@ -1,0 +1,1 @@
+java -cp lib/*;target/SoftwareMetrics-0.0.1-SNAPSHOT.jar App lib/asm-all-5.0.3.jar
