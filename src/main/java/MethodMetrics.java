@@ -292,27 +292,32 @@ public class MethodMetrics {
 		for (String cRef : classRef.keySet()) {
 			ret += cRef + sep;
 		}
-		if(!classRef.isEmpty()) ret = ret.substring(0, ret.length()-sep.length());
+		if (!classRef.isEmpty())
+			ret = ret.substring(0, ret.length() - sep.length());
 		ret += ",";
 		for (String external : externalMethods.keySet()) {
 			ret += external + sep;
 		}
-		if(!externalMethods.isEmpty()) ret = ret.substring(0, ret.length()-sep.length());
+		if (!externalMethods.isEmpty())
+			ret = ret.substring(0, ret.length() - sep.length());
 		ret += ",";
 		for (String local : localMethods.keySet()) {
 			ret += local + sep;
 		}
-		if(!localMethods.isEmpty()) ret = ret.substring(0, ret.length()-sep.length());
+		if (!localMethods.isEmpty())
+			ret = ret.substring(0, ret.length() - sep.length());
 		ret += ",";
 		for (String exception : exceptionRef.keySet()) {
 			ret += exception + sep;
 		}
-		if(!exceptionRef.isEmpty()) ret = ret.substring(0, ret.length()-sep.length());
+		if (!exceptionRef.isEmpty())
+			ret = ret.substring(0, ret.length() - sep.length());
 		ret += ",";
 		for (int i = 0; i < thrownExceptions.size(); i++) {
 			ret += thrownExceptions.get(i) + sep;
 		}
-		if(!thrownExceptions.isEmpty()) ret = ret.substring(0, ret.length()-sep.length());
+		if (!thrownExceptions.isEmpty())
+			ret = ret.substring(0, ret.length() - sep.length());
 		ret += ",";
 		ret += modifiers + ",";
 		ret += numLines + "\n";

@@ -22,8 +22,8 @@ import org.objectweb.asm.util.TraceMethodVisitor;
 public class App {
 
 	
-	public static void main(String args[]) throws IOException, AnalyzerException{
-		File f = new File(args[0]);
+	public App(String p) throws IOException, AnalyzerException{
+		File f = new File(p);
 		PrintWriter pw = new PrintWriter(new File(f.getName() + "_METRICS.csv"));
 		if(f.isFile() && isFileType(f.getName(), "class")){
 			processFile(f, pw);

@@ -1,6 +1,7 @@
 AnalyzerAdapter$Graph$Loop.class
 AnalyzerAdapter.class
 InstructionInfo.class
+MyMojo.class
 MethodMetrics.class
 AnalyzerAdapter$Graph$Edge.class
 App.class
