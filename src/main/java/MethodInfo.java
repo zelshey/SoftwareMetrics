@@ -26,7 +26,7 @@ public class MethodInfo {
 			metrics.totalDepth = a.cfg.totalDepthNesting();
 			metrics.cycoComplex = a.getCyclomaticComplexity();
 		}
-		metrics.dispMetrics(l);
+		//metrics.dispMetrics(l);
 		return metrics.prepForCSV();
 	}
 	

@@ -83,9 +83,9 @@ public class App {
         cr.accept(cn, 0);
         
         int len = cn.name.length();
-        printX(len + 4, '*', l);
-        l.info("* " + cn.name + " *");
-        printX(len + 4, '*', l);
+        //printX(len + 4, '*', l);
+        //l.info("* " + cn.name + " *");
+        //printX(len + 4, '*', l);
 		MethodInfo mi = new MethodInfo();
 		
 		pw.write(cn.name + '\n');

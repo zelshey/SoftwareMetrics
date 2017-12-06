@@ -42,8 +42,8 @@
         </parameter>
       </parameters>
       <configuration>
-        <name implementation="java.lang.String">${name}</name>
-        <path implementation="java.lang.String">${path}</path>
+        <name implementation="java.lang.String" default-value="${project.name}"/>
+        <path implementation="java.lang.String" default-value="${project.build.directory}"/>
       </configuration>
     </mojo>
   </mojos>
