@@ -2,6 +2,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.plugin.logging.Log;
 import org.objectweb.asm.Opcodes;
 
 public class MethodMetrics {
@@ -209,63 +210,64 @@ public class MethodMetrics {
 			modifiers += "deprecated ";
 	}
 
-	public void printX(int x, char c) {
+	public void printX(int x, char c, Log l) {
+		String s = "";
 		for (int i = 0; i < x; i++) {
-			System.out.print(c);
+			s = s + c;
 		}
-		System.out.println();
+		l.info(s);
 	}
 
-	public void dispMetrics() {
+	public void dispMetrics(Log l) {
 		halstead();
 		int off = 40;
-		printX(off * 2, '=');
-		System.out.printf("%-" + off + "s%s\n", "Name:", name);
-		System.out.printf("%-" + off + "s%d\n", "Cyclomatic Complexity", cycoComplex);
-		System.out.printf("%-" + off + "s%d\n", "Number of Arguments", numArgs);
-		System.out.printf("%-" + off + "s%d\n", "Number of Variable Declarations:", varDec.size());
-		System.out.printf("%-" + off + "s%d\n", "Number of Variable References:", varRefs.size());
-		System.out.printf("%-" + off + "s%d\n", "Number of Statements:", numStatments);
-		// num expressions
-		System.out.printf("%-" + off + "s%d\n", "Max Depth of Nesting:", maxDepth);
-		System.out.printf("%-" + off + "s%d\n", "Halstead Length:", LTH);
-		System.out.printf("%-" + off + "s%d\n", "Halstead Vocabulary:", VOC);
-		System.out.printf("%-" + off + "s%.2f\n", "Halstead Difficulty:", DIF);
-		System.out.printf("%-" + off + "s%.2f\n", "Halstead Volume:", VOL);
-		System.out.printf("%-" + off + "s%.2f\n", "Halstead Effort:", EFF);
-		System.out.printf("%-" + off + "s%.2f\n", "Halstead Bugs:", BUG);
-		System.out.printf("%-" + off + "s%d\n", "Total Depth of Nesting:", totalDepth);
-		System.out.printf("%-" + off + "s%d\n", "Number of Casts:", casts);
-		System.out.printf("%-" + off + "s%d\n", "Number of Loops:", numLoops);
-		System.out.printf("%-" + off + "s%d\n", "Number of Operators:", countOperators());
-		System.out.printf("%-" + off + "s%d\n", "Number of Operands:", countOperands());
+		printX(off * 2, '=', l);
+		
+		l.info(String.format("%-" + off + "s%s", "Name:", name));
+		l.info(String.format("%-" + off + "s%d", "Cyclomatic Complexity", cycoComplex));
+		l.info(String.format("%-" + off + "s%d", "Number of Arguments", numArgs));
+		l.info(String.format("%-" + off + "s%d", "Number of Variable Declarations:", varDec.size()));
+		l.info(String.format("%-" + off + "s%d", "Number of Variable References:", varRefs.size()));
+		l.info(String.format("%-" + off + "s%d", "Number of Statements:", numStatments));
+		l.info(String.format("%-" + off + "s%d", "Max Depth of Nesting:", maxDepth));
+		l.info(String.format("%-" + off + "s%d", "Halstead Length:", LTH));
+		l.info(String.format("%-" + off + "s%d", "Halstead Vocabulary:", VOC));
+		l.info(String.format("%-" + off + "s%.2f", "Halstead Difficulty:", DIF));
+		l.info(String.format("%-" + off + "s%.2f", "Halstead Volume:", VOL));
+		l.info(String.format("%-" + off + "s%.2f", "Halstead Effort:", EFF));
+		l.info(String.format("%-" + off + "s%.2f", "Halstead Bugs:", BUG));
+		l.info(String.format("%-" + off + "s%d", "Total Depth of Nesting:", totalDepth));
+		l.info(String.format("%-" + off + "s%d", "Number of Casts:", casts));
+		l.info(String.format("%-" + off + "s%d", "Number of Loops:", numLoops));
+		l.info(String.format("%-" + off + "s%d", "Number of Operators:", countOperators()));
+		l.info(String.format("%-" + off + "s%d", "Number of Operands:", countOperands()));
 		int i = 0;
-		System.out.printf("%-" + off + "s%d\n", "Classes Referened:", classRef.size());
+		l.info(String.format("%-" + off + "s%d", "Classes Referened:", classRef.size()));
 		for (String cRef : classRef.keySet()) {
-			System.out.printf("%-" + off + "s%s\n", "[" + i++ + "]", cRef);
+			l.info(String.format("%-" + off + "s%s", "[" + i++ + "]", cRef));
 		}
 		i = 0;
-		System.out.printf("%-" + off + "s%d\n", "External Methods:", externalMethods.size());
+		l.info(String.format("%-" + off + "s%d", "External Methods:", externalMethods.size()));
 		for (String external : externalMethods.keySet()) {
-			System.out.printf("%-" + off + "s%s\n", "[" + i++ + "]", external);
+			l.info(String.format("%-" + off + "s%s", "[" + i++ + "]", external));
 		}
-		System.out.printf("%-" + off + "s%d\n", "Local Methods:", localMethods.size());
+		l.info(String.format("%-" + off + "s%d", "Local Methods:", localMethods.size()));
 		i = 0;
 		for (String local : localMethods.keySet()) {
-			System.out.printf("%-" + off + "s%s\n", "[" + i++ + "]", local);
+			l.info(String.format("%-" + off + "s%s", "[" + i++ + "]", local));
 		}
-		System.out.printf("%-" + off + "s%d\n", "Exceptions Referenced:", exceptionRef.size());
+		l.info(String.format("%-" + off + "s%d", "Exceptions Referenced:", exceptionRef.size()));
 		i = 0;
 		for (String exception : exceptionRef.keySet()) {
-			System.out.printf("%-" + off + "s%s\n", "[" + i++ + "]", exception);
+			l.info(String.format("%-" + off + "s%s", "[" + i++ + "]", exception));
 		}
-		System.out.printf("%-" + off + "s%d\n", "Thrown Exceptions:", thrownExceptions.size());
+		l.info(String.format("%-" + off + "s%d", "Thrown Exceptions:", thrownExceptions.size()));
 		for (i = 0; i < thrownExceptions.size(); i++) {
-			System.out.printf("%-" + off + "s%s\n", "[" + i + "]", thrownExceptions.get(i));
+			l.info(String.format("%-" + off + "s%s", "[" + i + "]", thrownExceptions.get(i)));
 		}
-		System.out.printf("%-" + off + "s%s\n", "Modifiers:", modifiers);
-		System.out.printf("%-" + off + "s%d\n", "Number of Lines:", numLines);
-		printX(off * 2, '=');
+		l.info(String.format("%-" + off + "s%s", "Modifiers:", modifiers));
+		l.info(String.format("%-" + off + "s%d", "Number of Lines:", numLines));
+		printX(off * 2, '=', l);
 	}
 
 	public String prepForCSV() {

@@ -14,7 +14,8 @@
         <artifactId>SoftwareMetrics-maven-plugin</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <configuration>
-        	<path>${path}</path>
+        	<path>${project.build.directory}</path>
+			<name>${project.name}</name>
         </configuration>
       </plugin>
     </plugins>

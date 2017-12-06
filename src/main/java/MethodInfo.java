@@ -1,19 +1,16 @@
-import java.util.Arrays;
-
+import org.apache.maven.plugin.logging.Log;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.analysis.Analyzer;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 import org.objectweb.asm.tree.analysis.BasicInterpreter;
-import org.objectweb.asm.tree.analysis.Frame;
 
 public class MethodInfo {
 
-	public String get(MethodNode method, String className) throws AnalyzerException{
+	public String get(MethodNode method, String className, Log l) throws AnalyzerException{
 		MethodMetrics metrics = new MethodMetrics(className);
 		InstructionInfo ii = new InstructionInfo();
-		metrics.name = method.name;
+		metrics.name = method.name + method.desc;
 		metrics.numArgs = Type.getArgumentTypes(method.desc).length;
 		metrics.setMods(method.access);
 		metrics.thrownExceptions = method.exceptions;
@@ -29,7 +26,7 @@ public class MethodInfo {
 			metrics.totalDepth = a.cfg.totalDepthNesting();
 			metrics.cycoComplex = a.getCyclomaticComplexity();
 		}
-		metrics.dispMetrics();
+		metrics.dispMetrics(l);
 		return metrics.prepForCSV();
 	}
 	

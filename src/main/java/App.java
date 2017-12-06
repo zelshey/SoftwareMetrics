@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.maven.plugin.logging.Log;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
@@ -22,21 +23,21 @@ import org.objectweb.asm.util.TraceMethodVisitor;
 public class App {
 
 	
-	public App(String p) throws IOException, AnalyzerException{
+	public App(String n, String p, Log l) throws IOException, AnalyzerException{
 		File f = new File(p);
-		PrintWriter pw = new PrintWriter(new File(f.getName() + "_METRICS.csv"));
+		PrintWriter pw = new PrintWriter(new File(n.toUpperCase() + "_METRICS.csv"));
 		if(f.isFile() && isFileType(f.getName(), "class")){
-			processFile(f, pw);
+			processFile(f, pw, l);
 		}else if(f.isFile() && isFileType(f.getName(), "jar")){
-			processJar(f, pw);
+			//processJar(f, pw, l);
 		}else if(f.isDirectory()){
-			processDirectory(f, pw);
+			processDirectory(f, pw, l);
 		}
 		pw.close();
 	}
 	
 	
-	public static void processJar(File file, PrintWriter pw) throws IOException, AnalyzerException{
+	public static void processJar(File file, PrintWriter pw, Log l) throws IOException, AnalyzerException{
 		
 		URL url = file.toURI().toURL();
 		URL[] urls = new URL[]{url};
@@ -48,19 +49,19 @@ public class App {
 			String name = ze.getName();
 			if(isFileType(name, "class")){
 				InputStream is = cl.getResourceAsStream(ze.getName());
-				processFile(is, pw);
+				processFile(is, pw, l);
 			}
 		}
 	}
 	
-	public static void processDirectory(File file, PrintWriter pw) throws IOException, AnalyzerException{
+	public static void processDirectory(File file, PrintWriter pw, Log l) throws IOException, AnalyzerException{
 		for(File f: file.listFiles()){
 			if(f.isFile() && isFileType(f.getName(), "class")){
-				processFile(f, pw);
+				processFile(f, pw, l);
 			}else if(f.isFile() && isFileType(f.getName(), "jar")){
-				processJar(f, pw);
+				//processJar(f, pw, l);
 			}else if(f.isDirectory()){
-				processDirectory(f, pw);
+				processDirectory(f, pw, l);
 			}
 		}
 	}
@@ -75,56 +76,39 @@ public class App {
 	}
 	
 	
-	public static void processFile(InputStream is, PrintWriter pw) throws IOException, AnalyzerException{
+	public static void processFile(InputStream is, PrintWriter pw, Log l) throws IOException, AnalyzerException{
 		
         ClassReader cr = new ClassReader(is);
         ClassNode cn = new ClassNode();
         cr.accept(cn, 0);
         
         int len = cn.name.length();
-        printX(len + 4, '*');
-        System.out.println("* " + cn.name + " *");
-        printX(len + 4, '*');
+        printX(len + 4, '*', l);
+        l.info("* " + cn.name + " *");
+        printX(len + 4, '*', l);
 		MethodInfo mi = new MethodInfo();
 		
 		pw.write(cn.name + '\n');
 		pw.write(mi.csvHeader());
 		List<MethodNode> methods = cn.methods;
 		for(MethodNode method : methods){
-			pw.write(mi.get(method, cn.name));
+			pw.write(mi.get(method, cn.name, l));
 		}
 		pw.write("\n");
 		is.close();
 	}
 	
-	public static void processFile(File f, PrintWriter pw) throws IOException, AnalyzerException{
+	public static void processFile(File f, PrintWriter pw, Log l) throws IOException, AnalyzerException{
 		FileInputStream is = new FileInputStream(f);
-		
-        ClassReader cr = new ClassReader(is);
-        ClassNode cn = new ClassNode();
-        cr.accept(cn, 0);
-        
-        int len = cn.name.length();
-        printX(len + 4, '*');
-        System.out.println("* " + cn.name + " *");
-        printX(len + 4, '*');
-		MethodInfo mi = new MethodInfo();
-		
-		pw.write(cn.name + '\n');
-		pw.write(mi.csvHeader());
-		List<MethodNode> methods = cn.methods;
-		for(MethodNode method : methods){
-			pw.write(mi.get(method, cn.name));
-		}
-		pw.write("\n");
-		is.close();
+		processFile(is, pw, l);
 	}
 	
-	public static void printX(int x, char c) {
+	public static void printX(int x, char c, Log l) {
+		String s = "";
 		for (int i = 0; i < x; i++) {
-			System.out.print(c);
+			s = s + c;
 		}
-		System.out.println();
+		l.info(s);
 	}
 	
 	public static void viewByteCode(ClassNode cn){
